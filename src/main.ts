@@ -1,6 +1,7 @@
 let canvas: HTMLCanvasElement
 let context: CanvasRenderingContext2D
 let translationObject: canvasTranslationObject
+const size = [0, 0, 400, 400]
 const fps = 60
 const init = () => {
     canvas = <HTMLCanvasElement> document.getElementById("disp0")
