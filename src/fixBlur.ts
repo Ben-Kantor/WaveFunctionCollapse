@@ -5,4 +5,3 @@ function fix_dpi() {
     canvas.setAttribute('height', (style_height * dpi).toString());
     canvas.setAttribute('width', (style_width * dpi).toString());
 }
-//qqqqqq

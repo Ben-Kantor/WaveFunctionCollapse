@@ -12,7 +12,6 @@ function buildCanvasTranslator(
             scaleType == "fill" ?
                 Math.max(canvas.width / xRange, canvas.height / yRange) :
                 Math.min(canvas.width / xRange, canvas.height / yRange),
-        invScaleFactor = 1 / scaleFactor,
         xOffset = - xMin * scaleFactor,
         yOffset = canvas.height + yMin * scaleFactor,
         xExcess = canvas.width - xRange * scaleFactor,
@@ -49,7 +48,6 @@ function buildCanvasTranslator(
 }
 type vec3 = [number, number, number]
 type vec2 = [number, number]
-type matrix = [vec3, vec3, vec3]
 type coord = [number, number]
 interface canvasTranslationObject {
     scaleFactor: number
