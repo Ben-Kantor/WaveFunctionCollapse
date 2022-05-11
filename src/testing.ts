@@ -1,11 +1,10 @@
 function sprialSphere() {
     let theta = 0
-    let z = -1
+    let phi = -Math.PI/2
     let horizontalRadius = 0
     let i = 0
-    while (z < 1) {
-        z += 0.01
-        let phi = Math.asin(z)
+    while (phi < 1) {
+        phi += Math.PI/8
         horizontalRadius = Math.cos(phi)
         let horizontalCircumfrence = Math.PI * horizontalRadius
         theta += Math.PI / 4 / (horizontalCircumfrence)
@@ -15,8 +14,8 @@ function sprialSphere() {
 }
 function setupPoints(){
     sphereCoordinates = []
-    //sprialSphere()
-    fibonacciSphere()
+    sprialSphere()
+    //fibonacciSphere()
 }
 function fibonacciSphere(n: number = 1000) {
     const goldenRatio = (1 + 5**0.5)/2
