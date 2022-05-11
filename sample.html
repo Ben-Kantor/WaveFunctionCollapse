@@ -1,4 +1,33 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body{
+            margin: 0.5%;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #202433;
+            overflow: hidden;
+        }
+        canvas{
+            background-color: #2d3245;
+            width: 98%;
+            height: 92%;
+            border: 2px solid darkgray;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: white;">Use Arrow Keys</h1>
+    <canvas id="disp0"></canvas>
+    <script>
+        "use strict";
 const dpi = window.devicePixelRatio;
 function fix_dpi() {
     let style_height = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
@@ -156,11 +185,12 @@ function render() {
         const logicalCoordinate = cartesianToLogical(cartesianCoordinate);
         const graphicalCoordinate = logicalToGraphical(logicalCoordinate);
         //context.moveTo(...graphicalCoordinate)
-        context.arc(graphicalCoordinate[0], graphicalCoordinate[1], 2, 0, Math.PI * 2);
+        context.arc(...graphicalCoordinate, 2, 0, Math.PI * 2);
     });
     context.stroke();
 }
-function sprialSphere() {
+function setupPoints() {
+    sphereCoordinates = [];
     let theta = 0;
     let z = -1;
     let horizontalRadius = 0;
@@ -172,19 +202,10 @@ function sprialSphere() {
         let horizontalCircumfrence = Math.PI * horizontalRadius;
         theta += Math.PI / 4 / (horizontalCircumfrence);
         theta %= Math.PI * 2;
-        sphereCoordinates.push({ radius: 100, theta: theta, phi: phi });
+        sphereCoordinates.push({ radius: 100 + Math.sin(i) * 10, theta: theta, phi: phi });
     }
 }
-function setupPoints() {
-    sphereCoordinates = [];
-    //sprialSphere()
-    fibonacciSphere();
-}
-function fibonacciSphere(n = 1000) {
-    const goldenRatio = (1 + 5 ** 0.5) / 2;
-    for (let i = 0; i < n; i++) {
-        const theta = 2 * Math.PI * i / goldenRatio;
-        const phi = Math.acos(1 - 2 * (i + 0.5) / n);
-        sphereCoordinates.push({ radius: 100, theta: phi, phi: theta });
-    }
-}
+
+    </script>
+</body>
+</html>

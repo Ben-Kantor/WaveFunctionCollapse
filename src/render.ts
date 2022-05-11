@@ -12,4 +12,13 @@ function render(){
     context.lineWidth = 1
     context.strokeStyle = "white"
     context.stroke()
+    context.beginPath()
+    sphereCoordinates.forEach(coord => {
+        const cartesianCoordinate = sphericalToCartesian(coord)
+        const logicalCoordinate = cartesianToLogical(cartesianCoordinate)
+        const graphicalCoordinate = logicalToGraphical(logicalCoordinate)
+        //context.moveTo(...graphicalCoordinate)
+        context.arc(graphicalCoordinate[0], graphicalCoordinate[1], 2, 0, Math.PI * 2)
+    })
+    context.stroke()
 }
