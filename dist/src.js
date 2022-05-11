@@ -52,8 +52,9 @@ function buildCanvasTranslator(canvas, minViewArea, scaleType) {
 let canvas;
 let context;
 let translationObject;
-const size = [0, 0, 400, 400];
+let logicalToGraphical;
 const fps = 60;
+const rotOffs = -Math.PI / 16;
 const init = () => {
     canvas = document.getElementById("disp0");
     if (!canvas)
@@ -61,23 +62,48 @@ const init = () => {
     context = canvas.getContext("2d");
     if (!context)
         throw new Error("Context not found");
-    translationObject = buildCanvasTranslator(canvas, [-100, -100, 100, 100], "fit");
     fix_dpi();
+    translationObject = buildCanvasTranslator(canvas, [-150, -200, 150, 200], "fit");
+    logicalToGraphical = translationObject.convertCoord;
     frameLoop();
+    render();
 };
 document.body.onload = init;
 function frameLoop() {
     requestAnimationFrame(frameLoop);
 }
-function offsetRadially(point, rotationOffset = 0) {
+function radOffset(point, rotationOffset = 0) {
     const radianDir = Math.atan2(point[0], point[1]);
     const radius = Math.sqrt(point[0] ** 2 + point[1] ** 2);
-    const x = roundDigit(radius * Math.cos(radianDir + rotationOffset));
-    const y = roundDigit(radius * Math.sin(radianDir + rotationOffset));
+    const x = roundDigit(radius * Math.sin(radianDir + rotationOffset));
+    const y = roundDigit(radius * Math.cos(radianDir + rotationOffset));
     return [x, y];
 }
 function cartesianToLogical(point) {
     const zOffset = point[2];
-    const offsetPos = offsetRadially([...point].splice(0, 2));
-    return [offsetPos[0], offsetPos[1] + zOffset];
+    const offsetPos = radOffset(point.splice(0, 2), rotOffs);
+    return [offsetPos[0], offsetPos[1] / 2 + zOffset / 2];
+}
+const cartesianToGraphical = (n) => logicalToGraphical(cartesianToLogical(n));
+function sphericalToCartesian(coord) {
+    return [
+        roundDigit(coord.r * Math.cos(coord.φ) * Math.sin(coord.θ)),
+        roundDigit(coord.r * Math.sin(coord.φ) * Math.sin(coord.θ)),
+        roundDigit(coord.r * Math.cos(coord.φ))
+    ];
+}
+function render() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.beginPath();
+    context.moveTo(...cartesianToGraphical([0, 0, -150]));
+    context.lineTo(...cartesianToGraphical([-150, 0, -150]));
+    context.moveTo(...cartesianToGraphical([0, 0, -150]));
+    context.lineTo(...cartesianToGraphical([150, 0, -150]));
+    context.moveTo(...cartesianToGraphical([0, 0, -150]));
+    context.lineTo(...cartesianToGraphical([0, -150, -150]));
+    context.moveTo(...cartesianToGraphical([0, 0, -150]));
+    context.lineTo(...cartesianToGraphical([0, 150, -150]));
+    context.lineWidth = 1;
+    context.strokeStyle = "white";
+    context.stroke();
 }
